@@ -42,4 +42,16 @@ class PDOext extends PDO {
       parent::__construct($dsn, $username, $password, $options);
     }
   }
+
+  function quoteIdent($str) {
+    switch($this->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+      case 'sqlite':
+      case 'pgsql':
+        return '"' . strtr($str, array('"' => '""')) . '"';
+      case 'mysql':
+        return '`' . strtr($str, array('`' => '``')) . '`';
+      default:
+        throw new Exception('PDOext::quoteIdent(): do not know how to quote identifiers with this database type');
+    }
+  }
 }

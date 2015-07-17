@@ -24,3 +24,13 @@ Optional connection parameters:
   'unix_socket' => '/path/to/socket', // MYSQL
   'path' => '/path/to/db', // SQLite
 ```
+
+quoteIdent($str)
+----------------
+PDOext::quoteIdent() quotes the input string, so it can be used as identifier in a database query.
+
+Example:
+```php
+$column = 'data';
+$db->query("select " . $db->quoteIdent($column) . " from my_table where id="  . $db_quote($id));
+```
