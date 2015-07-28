@@ -19,9 +19,6 @@ class PDOext extends PDO {
       if(array_key_exists('host', $dsn))
 	$_dsn[] = "host={$dsn['host']}";
 
-      if(array_key_exists('host', $dsn))
-	$_dsn[] = "host={$dsn['host']}";
-
       if(array_key_exists('unix_socket', $dsn))
 	$_dsn[] = "unix_socket={$dsn['unix_socket']}";
 
