@@ -34,3 +34,12 @@ Example:
 $column = 'data';
 $db->query("select " . $db->quoteIdent($column) . " from my_table where id="  . $db_quote($id));
 ```
+
+disableForeignKeyChecks()
+-------------------------
+Disables foreign key checks.
+
+enableForeignKeyChecks()
+-------------------------
+(Re-)enables foreign key checks.
+

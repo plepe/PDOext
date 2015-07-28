@@ -51,4 +51,30 @@ class PDOext extends PDO {
         throw new Exception('PDOext::quoteIdent(): do not know how to quote identifiers with this database type');
     }
   }
+
+  function disableForeignKeyChecks() {
+    switch($this->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+      case 'sqlite':
+	$this->query("pragma foreign_keys=off;");
+	return;
+      case 'mysql':
+	$this->query("set foreign_key_checks=0;");
+	return;
+      default:
+        throw new Exception('disableForeignKeyChecks:: do not know how to handle this database type');
+    }
+  }
+
+  function enableForeignKeyChecks() {
+    switch($this->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+      case 'sqlite':
+	$this->query("pragma foreign_keys=on;");
+	return;
+      case 'mysql':
+	$this->query("set foreign_key_checks=1;");
+	return;
+      default:
+        throw new Exception('enableForeignKeyChecks:: do not know how to handle this database type');
+    }
+  }
 }
