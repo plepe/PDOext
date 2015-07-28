@@ -27,10 +27,10 @@ class PDOext extends PDO {
 
       $_dsn = "{$dsn['type']}:" . implode(";", $_dsn);
 
-      if(!array_key_exists('username', $_dsn))
+      if(!array_key_exists('username', $dsn))
 	$dsn['username'] = null;
 
-      if(!array_key_exists('password', $_dsn))
+      if(!array_key_exists('password', $dsn))
 	$dsn['password'] = null;
 
       parent::__construct($_dsn, $dsn['username'], $dsn['password']);
