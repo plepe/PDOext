@@ -43,3 +43,6 @@ enableForeignKeyChecks()
 -------------------------
 (Re-)enables foreign key checks.
 
+tableExists($id)
+---------------
+Checks if the given table exists and returns true if it does. False, if it doesn't.

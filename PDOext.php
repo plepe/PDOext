@@ -77,4 +77,13 @@ class PDOext extends PDO {
         throw new Exception('enableForeignKeyChecks:: do not know how to handle this database type');
     }
   }
+
+  function tableExists($id) {
+    $res = $this->query("select 1 from " . $this->quoteIdent($id));
+    if($res === false)
+      return false;
+
+    $res->closeCursor();
+    return true;
+  }
 }
