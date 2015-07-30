@@ -52,6 +52,13 @@ class PDOext extends PDO {
     }
   }
 
+  function quote($str, $parameter_type=PDO::PARAM_STR) {
+    if($str === null)
+      return 'NULL';
+
+    return parent::quote($str, $parameter_type);
+  }
+
   function disableForeignKeyChecks() {
     switch($this->getAttribute(PDO::ATTR_DRIVER_NAME)) {
       case 'sqlite':

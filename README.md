@@ -35,6 +35,10 @@ $column = 'data';
 $db->query("select " . $db->quoteIdent($column) . " from my_table where id="  . $db_quote($id));
 ```
 
+quote($str, [$parameter_type])
+------------------------------
+Like PDO::quote(), but returns NULL when $str === null.
+
 disableForeignKeyChecks()
 -------------------------
 Disables foreign key checks.
