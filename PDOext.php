@@ -1,6 +1,8 @@
 <?php
 class PDOext extends PDO {
   function __construct($dsn, $username=null, $password=null, $options=array()) {
+    $this->options = $options;
+
     if(is_array($dsn)) {
       $_dsn = array();
 
@@ -92,5 +94,18 @@ class PDOext extends PDO {
 
     $res->closeCursor();
     return true;
+  }
+
+  function query() {
+    if(array_key_exists('debug', $this->options) && ($this->options['debug'])) {
+      $qry = func_get_arg(0);
+
+      if($this->options['debug'] & 1)
+	print "<!-- $qry -->\n";
+      if($this->options['debug'] & 2)
+	messages_debug($qry);
+    }
+
+    return call_user_func_array('parent::query', func_get_args());
   }
 }

@@ -25,6 +25,13 @@ Optional connection parameters:
   'path' => '/path/to/db', // SQLite
 ```
 
+Additional options:
+```php
+'debug' => 0 or 1 or 2
+```
+
+* debug: when debug is 0 don't generate debug messages; when debug is 1 print a HTML comment with all DB queries; when debug is 2 generate a debug message for each DB query (see modulekit-base:messages:messages_debug()).
+
 quoteIdent($str)
 ----------------
 PDOext::quoteIdent() quotes the input string, so it can be used as identifier in a database query.
