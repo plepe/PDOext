@@ -1,8 +1,6 @@
 <?php
 class PDOext extends PDO {
   function __construct($dsn, $username=null, $password=null, $options=array()) {
-    $this->options = $options;
-
     if(is_array($dsn)) {
       $_dsn = array();
 
@@ -35,9 +33,15 @@ class PDOext extends PDO {
       if(!array_key_exists('password', $dsn))
 	$dsn['password'] = null;
 
-      parent::__construct($_dsn, $dsn['username'], $dsn['password']);
+      if($username === null)
+        $this->options = array();
+      else
+        $this->options = $username;
+
+      parent::__construct($_dsn, $dsn['username'], $dsn['password'], $this->options);
     }
     else {
+      $this->options = $options;
       parent::__construct($dsn, $username, $password, $options);
     }
   }
