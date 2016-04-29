@@ -1,6 +1,8 @@
 <?php
 class PDOext extends PDO {
   function __construct($dsn, $username=null, $password=null, $options=array()) {
+    $this->time_init = microtime(true);
+
     if(is_array($dsn)) {
       $_dsn = array();
 
@@ -102,14 +104,23 @@ class PDOext extends PDO {
 
   function query() {
     if(array_key_exists('debug', $this->options) && ($this->options['debug'])) {
+      $time_start = microtime(true);
+    }
+
+    $ret = call_user_func_array('parent::query', func_get_args());
+
+    if(array_key_exists('debug', $this->options) && ($this->options['debug'])) {
+      $span_since_init = sprintf("%.0fms", (microtime(true) - $this->time_init) * 1000.0);
+      $duration = sprintf("%.1fms", (microtime(true) - $time_start) * 1000.0);
+
       $qry = func_get_arg(0);
 
       if($this->options['debug'] & 1)
-	print "<!-- $qry -->\n";
+	print "<!-- @{$span_since_init} + Δ{$duration}:\n{$qry} -->\n";
       if($this->options['debug'] & 2)
-	messages_debug($qry);
+	messages_debug("@{$span_since_init} + Δ{$duration}:\n{$qry}");
     }
 
-    return call_user_func_array('parent::query', func_get_args());
+    return $ret;
   }
 }
