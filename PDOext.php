@@ -63,6 +63,10 @@ class PDOext extends PDO {
   function quote($str, $parameter_type=PDO::PARAM_STR) {
     if($str === null)
       return 'NULL';
+    if($str === true)
+      return 'TRUE';
+    if($str === false)
+      return 'FALSE';
 
     return parent::quote($str, $parameter_type);
   }
