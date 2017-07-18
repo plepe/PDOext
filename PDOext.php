@@ -109,14 +109,27 @@ class PDOext extends PDO {
   function query() {
     if(array_key_exists('debug', $this->options) && ($this->options['debug'])) {
       $time_start = microtime(true);
+      $span_since_init = sprintf("%.0fms", (microtime(true) - $this->time_init) * 1000.0);
     }
 
-    $ret = call_user_func_array('parent::query', func_get_args());
+    try {
+      $ret = call_user_func_array('parent::query', func_get_args());
+    }
+    catch(Exception $e) {
+      $duration = sprintf("%.1fms", (microtime(true) - $time_start) * 1000.0);
+      $qry = func_get_arg(0);
+      $error = $e->getMessage();
+
+      if($this->options['debug'] & 1)
+	print "<!-- @{$span_since_init} + Δ{$duration} (EXCEPTION: {$error}):\n{$qry} -->\n";
+      if($this->options['debug'] & 2)
+	messages_debug("@{$span_since_init} + Δ{$duration} (EXCEPTION: {$error}):\n{$qry}", MSG_ERROR);
+
+      throw $e;
+    }
 
     if(array_key_exists('debug', $this->options) && ($this->options['debug'])) {
-      $span_since_init = sprintf("%.0fms", (microtime(true) - $this->time_init) * 1000.0);
       $duration = sprintf("%.1fms", (microtime(true) - $time_start) * 1000.0);
-
       $qry = func_get_arg(0);
 
       if($this->options['debug'] & 1)
