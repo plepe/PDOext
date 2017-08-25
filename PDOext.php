@@ -4,6 +4,7 @@ class PDOext extends PDO {
     $this->time_init = microtime(true);
 
     if(is_array($dsn)) {
+      $this->options = $dsn;
       $_dsn = array();
 
       if(!array_key_exists('type', $dsn)) {
@@ -34,11 +35,6 @@ class PDOext extends PDO {
 
       if(!array_key_exists('password', $dsn))
 	$dsn['password'] = null;
-
-      if($username === null)
-        $this->options = array();
-      else
-        $this->options = $username;
 
       parent::__construct($_dsn, $dsn['username'], $dsn['password'], $this->options);
     }
