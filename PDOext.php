@@ -98,7 +98,17 @@ class PDOext extends PDO {
   }
 
   function tableExists($id) {
-    $res = $this->query("select 1 from " . $this->quoteIdent($id));
+    try {
+      $res = $this->query("select 1 from " . $this->quoteIdent($id));
+    }
+    catch (Exception $e) {
+      if ($this->errorCode() === '42S02') {
+        return false;
+      } else {
+        throw $e;
+      }
+    }
+
     if($res === false)
       return false;
 
