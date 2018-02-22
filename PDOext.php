@@ -112,6 +112,70 @@ class PDOext extends PDO {
     return true;
   }
 
+  function tables () {
+    switch($this->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+      case 'sqlite':
+        $res = $this->query("SELECT name FROM sqlite_master WHERE type='table'");
+        $res = $res->fetchAll();
+        return array_map(function ($x) { return $x['name']; }, $res);
+      case 'mysql':
+        $res = $this->query("SELECT table_name FROM information_schema.tables where table_schema=" . $this->quote($this->options['dbname']));
+        $res = $res->fetchAll();
+        return array_map(function ($x) { return $x['table_name']; }, $res);
+      default:
+        throw new Exception('tables(): do not know how to handle this database type');
+    }
+  }
+
+  /**
+   * return list of columns, e.g.:
+   * {
+   *   "id": {
+   *     "type": "integer" OR "bigint(20) unsigned",
+   *     "notnull": true/false,
+   *     "default": null/"0",
+   *     "key": PRI|false,
+   *     "extra": "auto_increment"
+   *   },
+   *   "...."
+   * }
+   */
+  function columns ($table) {
+    switch($this->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+      case 'sqlite':
+        $res = $this->query("PRAGMA table_info(" . $this->quote($table) . ")");
+
+        $result = array();
+        while ($elem = $res->fetch()) {
+          $result[$elem['name']] = array(
+            'type' => $elem['type'],
+            'notnull' => $elem['notnull'] === 1,
+            'default' => $elem['dflt_value'],
+            'key' => $elem['pk'],
+          );
+        }
+
+        return $result;
+      case 'mysql':
+        $res = $this->query("SHOW columns FROM " . $this->quoteIdent($table));
+
+        $result = array();
+        while ($elem = $res->fetch()) {
+          $result[$elem['Field']] = array(
+            'type' => $elem['Type'],
+            'notnull' => $elem['Null'] === 'NO',
+            'default' => $elem['Default'],
+            'key' => $elem['Key'],
+            'extra' => $elem['Extra'],
+          );
+        }
+
+        return $result;
+      default:
+        throw new Exception('columns(): do not know how to handle this database type');
+    }
+  }
+
   function query() {
     if(array_key_exists('debug', $this->options) && ($this->options['debug'])) {
       $time_start = microtime(true);

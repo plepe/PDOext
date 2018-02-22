@@ -57,3 +57,26 @@ enableForeignKeyChecks()
 tableExists($id)
 ---------------
 Checks if the given table exists and returns true if it does. False, if it doesn't.
+
+tables()
+--------
+Returns the list of tables in the current database, e.g.
+```json
+[ 'users', 'messages' ]
+```
+
+columns($table)
+---------------
+Returns the list of columns for the table in the current database, with the column id as keys and meta data as values, e.g.:
+```json
+{
+  "id": {
+    "type": "integer" OR "bigint(20) unsigned",
+    "notnull": true/false,
+    "default": null/"0",
+    "key": true|PRI|false,
+    "extra": "auto_increment"
+  },
+  "...."
+}
+```
