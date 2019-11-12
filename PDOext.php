@@ -177,8 +177,8 @@ class PDOext extends PDO {
   }
 
   function query() {
+    $time_start = microtime(true);
     if(array_key_exists('debug', $this->options) && ($this->options['debug'])) {
-      $time_start = microtime(true);
       $span_since_init = sprintf("%.0fms", (microtime(true) - $this->time_init) * 1000.0);
     }
 
