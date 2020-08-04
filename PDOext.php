@@ -27,6 +27,8 @@ class PDOext extends PDO {
 
       if(array_key_exists('charset', $dsn))
 	$_dsn[] = "charset={$dsn['charset']}";
+      else
+	$_dsn[] = "charset=utf8";
 
       $_dsn = "{$dsn['type']}:" . implode(";", $_dsn);
 
