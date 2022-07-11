@@ -196,6 +196,8 @@ class PDOext extends PDO {
 	print "<!-- @{$span_since_init} + Δ{$duration} (EXCEPTION: {$error}):\n{$qry} -->\n";
       if($this->options['debug'] & 2)
 	messages_debug("@{$span_since_init} + Δ{$duration} (EXCEPTION: {$error}):\n{$qry}", MSG_ERROR);
+      if($this->options['debug'] & 4)
+	trigger_error("@{$span_since_init} + {$duration} (EXCEPTION: {$error}):\n{$qry}", E_USER_NOTICE);
 
       throw $e;
     }
@@ -208,6 +210,8 @@ class PDOext extends PDO {
 	print "<!-- @{$span_since_init} + Δ{$duration}:\n{$qry} -->\n";
       if($this->options['debug'] & 2)
 	messages_debug("@{$span_since_init} + Δ{$duration}:\n{$qry}");
+      if($this->options['debug'] & 4)
+	trigger_error("@{$span_since_init} + {$duration}:\n{$qry}", E_USER_NOTICE);
     }
 
     return $ret;
