@@ -178,7 +178,7 @@ class PDOext extends PDO {
     }
   }
 
-  function query() {
+  function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false {
     $time_start = microtime(true);
     if(array_key_exists('debug', $this->options) && ($this->options['debug'])) {
       $span_since_init = sprintf("%.0fms", (microtime(true) - $this->time_init) * 1000.0);
